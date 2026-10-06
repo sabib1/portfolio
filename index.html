@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>Sabib Sarkar - Full Stack Engineer</title>
-  
-  <!-- Circular Favicon (use DP.jpg) -->
-  <link rel="icon" type="image/png" href="DP.jpg">
-  
+  <title>Full Parent Iframe</title>
+
+  <!-- Placeholder favicon (will be replaced by JS with circular version) -->
+  <link id="favicon" rel="icon" type="image/png" href="DP.jpg">
+
   <style>
     html, body {
       height: 100%;
@@ -33,7 +33,7 @@
       top: 0;
     }
 
-    /* Circular Image */
+    /* Circular image on the page */
     .circle-img {
       position: fixed;
       top: 20px;
@@ -51,7 +51,7 @@
 </head>
 <body>
 
-  <!-- Circular Profile Image -->
+  <!-- Circular profile image -->
   <img class="circle-img" src="DP.jpg" alt="Profile">
 
   <iframe
@@ -61,6 +61,44 @@
     allowtransparency="true"
     allowfullscreen
   ></iframe>
+
+  <script>
+    // Create a real circular favicon from DP.jpg
+    function setCircularFavicon(imageSrc) {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = imageSrc;
+
+      img.onload = function () {
+        const size = 64; // favicon size
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+
+        // Draw circle clip
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.clip();
+
+        // Draw the image inside the circle
+        ctx.drawImage(img, 0, 0, size, size);
+
+        // Set as favicon
+        const link = document.getElementById("favicon");
+        link.href = canvas.toDataURL("image/png");
+        link.type = "image/png";
+      };
+
+      img.onerror = function () {
+        console.warn("Could not load DP.jpg for favicon");
+      };
+    }
+
+    // Run it
+    setCircularFavicon("DP.jpg");
+  </script>
 
 </body>
 </html>
